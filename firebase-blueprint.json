@@ -1,0 +1,199 @@
+{
+  "entities": {
+    "Ship": {
+      "title": "Ship",
+      "description": "Master data kapal laut dan armada transportasi",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "code": { "type": "string", "maxLength": 50 },
+        "name": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["ferry_roro", "cargo_container", "passenger_express", "bulk_carrier", "tanker"] },
+        "grossTonnage": { "type": "number" },
+        "maxPassengers": { "type": "number" },
+        "maxCargoTons": { "type": "number" },
+        "maxVehicles": { "type": "number" },
+        "yearBuilt": { "type": "number" },
+        "captainName": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["active", "sailing", "docked", "maintenance", "standby"] },
+        "currentRoute": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["code", "name", "type", "grossTonnage", "maxPassengers", "maxCargoTons", "status"]
+    },
+    "Route": {
+      "title": "Route",
+      "description": "Master data rute dan dermaga pelabuhan",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "code": { "type": "string", "maxLength": 50 },
+        "originPort": { "type": "string", "maxLength": 100 },
+        "destinationPort": { "type": "string", "maxLength": 100 },
+        "distanceNauticalMiles": { "type": "number" },
+        "estTravelHours": { "type": "number" },
+        "basePassengerPrice": { "type": "number" },
+        "baseCargoPricePerTon": { "type": "number" },
+        "status": { "type": "string", "enum": ["active", "closed", "weather_warning"] },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["code", "originPort", "destinationPort", "distanceNauticalMiles", "estTravelHours", "status"]
+    },
+    "Voyage": {
+      "title": "Voyage",
+      "description": "Jadwal dan operasional keberangkatan pelayaran kapal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "voyageNumber": { "type": "string", "maxLength": 50 },
+        "shipId": { "type": "string", "maxLength": 100 },
+        "shipName": { "type": "string", "maxLength": 100 },
+        "routeId": { "type": "string", "maxLength": 100 },
+        "originPort": { "type": "string", "maxLength": 100 },
+        "destinationPort": { "type": "string", "maxLength": 100 },
+        "departureTime": { "type": "string" },
+        "arrivalTime": { "type": "string" },
+        "status": { "type": "string", "enum": ["scheduled", "boarding", "sailing", "docked", "completed", "cancelled"] },
+        "currentPassengers": { "type": "number" },
+        "currentCargoTons": { "type": "number" },
+        "currentVehicles": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 500 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["voyageNumber", "shipId", "routeId", "originPort", "destinationPort", "departureTime", "status"]
+    },
+    "Passenger": {
+      "title": "Passenger",
+      "description": "Manifest tiket dan data penumpang kapal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "voyageId": { "type": "string", "maxLength": 100 },
+        "ticketNumber": { "type": "string", "maxLength": 50 },
+        "passengerName": { "type": "string", "maxLength": 100 },
+        "idCardNumber": { "type": "string", "maxLength": 50 },
+        "gender": { "type": "string", "enum": ["L", "P"] },
+        "ageCategory": { "type": "string", "enum": ["dewasa", "anak", "bayi"] },
+        "seatNumber": { "type": "string", "maxLength": 30 },
+        "fareClass": { "type": "string", "enum": ["ekonomi", "bisnis", "vip"] },
+        "ticketPrice": { "type": "number" },
+        "bookingStatus": { "type": "string", "enum": ["booked", "checked_in", "boarded", "cancelled"] },
+        "contactPhone": { "type": "string", "maxLength": 30 },
+        "emergencyContact": { "type": "string", "maxLength": 50 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["voyageId", "ticketNumber", "passengerName", "idCardNumber", "fareClass", "ticketPrice", "bookingStatus"]
+    },
+    "Cargo": {
+      "title": "Cargo",
+      "description": "Manifest muatan logistik, kontainer dan kendaraan",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "voyageId": { "type": "string", "maxLength": 100 },
+        "manifestNumber": { "type": "string", "maxLength": 50 },
+        "cargoType": { "type": "string", "enum": ["vehicle", "container", "breakbulk", "dangerous_goods", "general_cargo"] },
+        "description": { "type": "string", "maxLength": 200 },
+        "senderName": { "type": "string", "maxLength": 100 },
+        "receiverName": { "type": "string", "maxLength": 100 },
+        "weightTons": { "type": "number" },
+        "vehiclePlateNumber": { "type": "string", "maxLength": 30 },
+        "deckPlacement": { "type": "string", "maxLength": 50 },
+        "isDangerousGoods": { "type": "boolean" },
+        "dangerousGoodsClass": { "type": "string", "maxLength": 30 },
+        "handlingNotes": { "type": "string", "maxLength": 300 },
+        "fee": { "type": "number" },
+        "status": { "type": "string", "enum": ["queued", "loaded", "in_transit", "unloaded", "claimed"] },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["voyageId", "manifestNumber", "cargoType", "description", "senderName", "weightTons", "fee", "status"]
+    },
+    "TrackingLog": {
+      "title": "TrackingLog",
+      "description": "Histori pelacakan posisi dan aktivitas kapal serta logistik",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "voyageId": { "type": "string", "maxLength": 100 },
+        "shipId": { "type": "string", "maxLength": 100 },
+        "eventType": { "type": "string", "maxLength": 50 },
+        "locationName": { "type": "string", "maxLength": 100 },
+        "latitude": { "type": "number" },
+        "longitude": { "type": "number" },
+        "speedKnots": { "type": "number" },
+        "weatherCondition": { "type": "string", "maxLength": 100 },
+        "notes": { "type": "string", "maxLength": 300 },
+        "reporterName": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["voyageId", "eventType", "locationName", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Notifikasi otomatis sistem operasional maritim real-time",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string", "maxLength": 100 },
+        "message": { "type": "string", "maxLength": 300 },
+        "type": { "type": "string", "enum": ["info", "warning", "success", "danger"] },
+        "voyageId": { "type": "string", "maxLength": 100 },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "message", "type", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Profil operator pelabuhan dan petugas kapal",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "email": { "type": "string", "maxLength": 100 },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["admin", "cargo_officer", "ticket_officer", "harbor_master", "captain"] },
+        "portLocation": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["email", "displayName", "role"]
+    }
+  },
+  "firestore": {
+    "/ships/{shipId}": {
+      "schema": "Ship",
+      "description": "Koleksi data master armada kapal"
+    },
+    "/routes/{routeId}": {
+      "schema": "Route",
+      "description": "Koleksi data master rute penyeberangan dan pelabuhan"
+    },
+    "/voyages/{voyageId}": {
+      "schema": "Voyage",
+      "description": "Koleksi jadwal dan transaksi operasional pelayaran"
+    },
+    "/passengers/{passengerId}": {
+      "schema": "Passenger",
+      "description": "Koleksi transaksi tiket dan manifest penumpang"
+    },
+    "/cargo/{cargoId}": {
+      "schema": "Cargo",
+      "description": "Koleksi transaksi manifest muatan kargo dan kendaraan"
+    },
+    "/trackingLogs/{logId}": {
+      "schema": "TrackingLog",
+      "description": "Koleksi histori pelacakan perjalanan logistik dan kapal"
+    },
+    "/notifications/{notificationId}": {
+      "schema": "Notification",
+      "description": "Koleksi notifikasi otomatis real-time"
+    },
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Koleksi data profil pengguna dan petugas operasional"
+    }
+  }
+}
